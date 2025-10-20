@@ -1,0 +1,30 @@
+{
+  "name": "darna-api",
+  "version": "0.0.1",
+  "description": "Darna is an API for real Estate managments and selling",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon --watch src --exec ts-node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OussamaBenoujja/Darna.git"
+  },
+  "keywords": [
+    "RealEstate",
+    "API",
+    "MongoDB",
+    "TypeScript"
+  ],
+  "author": "Oussama Benoujja - Abdillah Ajouqa - Anouar El Aissaoui",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OussamaBenoujja/Darna/issues"
+  },
+  "homepage": "https://github.com/OussamaBenoujja/Darna#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1"
+  }
+}
