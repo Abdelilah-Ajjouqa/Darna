@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "SSO",
+    "outDir": "SSO-out"
+  },
+  "include": ["SSO"]
+}
