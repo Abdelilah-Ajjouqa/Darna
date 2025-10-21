@@ -4,8 +4,14 @@
   "description": "Darna is an API for real Estate managments and selling",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "dev": "nodemon --watch src --exec ts-node src/index.ts"
+    "build:src": "tsc -p tsconfig.src.json",
+    "build:sso": "tsc -p tsconfig.sso.json",
+    "build": "npm run build:src && npm run build:sso",
+    "start": "node out/app.js",
+    "start:sso": "node SSO-out/app.js",
+    "dev": "nodemon --watch src --exec ts-node src/app.ts",
+    "dev:sso": "nodemon --watch SSO --exec ts-node SSO/index.ts",
+    "clean": "rimraf out SSO-out"
   },
   "repository": {
     "type": "git",
