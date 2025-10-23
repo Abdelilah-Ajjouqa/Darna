@@ -1,5 +1,5 @@
 "use strict";
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
     throw new Error("no database URI found");
