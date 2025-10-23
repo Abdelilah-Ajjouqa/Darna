@@ -1,0 +1,22 @@
+version: '3.8'
+
+app:
+  build: .
+  container_name: darna-api
+  port: "3000:3000"
+  environment:
+    - PORT= 3000
+    - MONGO_URI=mongodb://mongo:27017/darna
+  depends_on:
+    - mongo
+
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
