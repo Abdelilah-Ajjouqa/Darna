@@ -1,4 +1,4 @@
-require("mongoose");
+import mongoose from "mongoose";
 
 const realEstateSchema = new mongoose.Schema({
     title: { type: String, required: true, trim: true },
@@ -9,8 +9,20 @@ const realEstateSchema = new mongoose.Schema({
 
     location: {
         address: { type: String, required: true },
-        coordinates: { types: Number, required: true, min: -90, max: 90 },
-        longitudd: { type: Number, required: true, min: -180, max: 180 },
+        coordinates: {
+            latitude: {
+                type: Number,
+                required: true,
+                min: -90,
+                max: 90
+            },
+            longitude: {
+                type: Number,
+                required: true,
+                min: -180,
+                max: 180
+            }
+        },
     },
 
     characteristics: {
@@ -35,13 +47,13 @@ const realEstateSchema = new mongoose.Schema({
         },
         energyDiagnostics: { type: String }
     },
-    timestamp: true
+    // timestamp: true
 });
 
 realEstateSchema.index({ 'location.coordinates.latitude': 1, 'location.coordinates.longitude': 1 });
 realEstateSchema.index({ transactionType: 1, price: 1 });
 realEstateSchema.index({ availability: 1 });
 
-const realEstate = mongoose.model('RealEstate', realEstateSchema);
+const RealEstate = mongoose.model('RealEstate', realEstateSchema);
 
-module.exports = realEstate;
+export default RealEstate;
