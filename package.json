@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.src.json",
+    "build:kc": "tsc -p tsconfig.kc.json",
+    "start:kc": "node keyCloak/kcOut/app.js",
     "start": "node out/app.js",
     "dev": "nodemon --watch src --exec ts-node src/app.ts",
     "clean": "rimraf out SSO-out"
@@ -29,6 +31,7 @@
     "@langchain/openai": "^1.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
     "langchain": "^1.0.1",
     "mongoose": "^8.19.1",
     "node-fetch": "^3.3.2",
