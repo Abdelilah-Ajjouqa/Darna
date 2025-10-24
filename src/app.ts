@@ -1,12 +1,14 @@
 require("dotenv").config({ path: __dirname + "/../.env" });
 
-const express = require("express");
-const dbConnect = require(__dirname + "/config/db_config");
+import express from "express";
+import { connectionDB } from "./config/db_config";
 
-dbConnect();
+//connectionDB();
 
 const app = express();
 const port = process.env.PORT;
+
+app.use(express.json());
 
 app.listen(port, () => {
   console.log(`running Server on http://localhost:${port}`);
