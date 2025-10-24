@@ -1,9 +1,8 @@
-import { ObjectId } from "mongoose";
 import RealEstate from "../models/real-estate";
 
 class RealEstateServices {
 
-    private static async checkRealEstateExists(id: ObjectId): Promise<any> {
+    private static async checkRealEstateExists(id: string): Promise<any> {
         const realEstate: object | null = await RealEstate.findById(id);
         if (!realEstate) {
             throw new Error("Cannot find the real-estate");
@@ -19,10 +18,6 @@ class RealEstateServices {
             .skip(offset)
             .limit(limit)
             .sort({ createdAt: -1 });
-
-        if (!allRealEstates) {
-            throw new Error("No real estates found");
-        }
 
         // Calculate pagination metadata
         const totalPages: number = Math.ceil(totalCount / limit);
@@ -42,7 +37,7 @@ class RealEstateServices {
         };
     }
 
-    static async showRealEstate(id: ObjectId): Promise<any> {
+    static async showRealEstate(id: string): Promise<any> {
         const realEstate: object | null = await this.checkRealEstateExists(id);
         return realEstate;
     }
@@ -54,14 +49,14 @@ class RealEstateServices {
             'location.coordinates.longitude': data.location?.coordinates?.longitude,
         });
         if (duplicate) {
-            throw new Error('A real-estate with the same title and address/coordinates already exists');
+            throw new Error('A real-estate with the same address / coordinates already exists');
         }
 
         const newRealEstate: object = await RealEstate.create(data);
         return newRealEstate;
     }
 
-    static async updateRealEstate(id: ObjectId, data: any): Promise<any> {
+    static async updateRealEstate(id: string, data: any): Promise<any> {
         await this.checkRealEstateExists(id);
         const updatedRealEstate: object | null = await RealEstate.findByIdAndUpdate(
             id,
@@ -71,7 +66,7 @@ class RealEstateServices {
         return updatedRealEstate;
     }
 
-    static async deleteRealEstate(id: ObjectId): Promise<any> {
+    static async deleteRealEstate(id: string): Promise<any> {
         await this.checkRealEstateExists(id);
         const realEstate: object | null = await RealEstate.findByIdAndDelete(id);
         return { message: "Real-estate deleted successfully", deletedRealEstate: realEstate };
@@ -131,7 +126,7 @@ class RealEstateServices {
         return results;
     }
 
-    static async updateAvailability(id: ObjectId, availability: boolean): Promise<any> {
+    static async updateAvailability(id: string, availability: boolean): Promise<any> {
         await this.checkRealEstateExists(id);
         const updatedRealEstate: object | null = await RealEstate.findByIdAndUpdate(
             id,

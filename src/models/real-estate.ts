@@ -46,9 +46,8 @@ const realEstateSchema = new mongoose.Schema({
             partiesAllowed: { type: Boolean, default: false }
         },
         energyDiagnostics: { type: String }
-    },
-    // timestamp: true
-});
+    }
+}, { timestamps: true });
 
 realEstateSchema.index({ 'location.coordinates.latitude': 1, 'location.coordinates.longitude': 1 });
 realEstateSchema.index({ transactionType: 1, price: 1 });
