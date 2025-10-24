@@ -4,28 +4,51 @@ import RealEstate from "../models/real-estate";
 class RealEstateServices {
 
     private static async checkRealEstateExists(id: ObjectId): Promise<any> {
-        const realEstate = await RealEstate.findById(id);
+        const realEstate: object | null = await RealEstate.findById(id);
         if (!realEstate) {
             throw new Error("Cannot find the real-estate");
         }
         return realEstate;
     }
 
-    static async getAllRealEstates(): Promise<any[]> {
-        const allRealEstates: any[] = await RealEstate.find();
-        if (!allRealEstates || allRealEstates.length === 0) {
+    static async getAllRealEstates(page: number = 1, limit: number = 10): Promise<any> {
+        const offset: number = (page - 1) * limit;
+        const totalCount: number = await RealEstate.countDocuments();
+
+        const allRealEstates: object = await RealEstate.find()
+            .skip(offset)
+            .limit(limit)
+            .sort({ createdAt: -1 });
+
+        if (!allRealEstates) {
             throw new Error("No real estates found");
         }
-        return allRealEstates;
+
+        // Calculate pagination metadata
+        const totalPages: number = Math.ceil(totalCount / limit);
+        const hasNextPage: boolean = page < totalPages;
+        const hasPrevPage: boolean = page > 1;
+
+        return {
+            data: allRealEstates,
+            pagination: {
+                currentPage: page,
+                totalPages: totalPages,
+                totalCount: totalCount,
+                limit: limit,
+                hasNextPage: hasNextPage,
+                hasPrevPage: hasPrevPage
+            }
+        };
     }
 
     static async showRealEstate(id: ObjectId): Promise<any> {
-        const realEstate = await this.checkRealEstateExists(id);
+        const realEstate: object | null = await this.checkRealEstateExists(id);
         return realEstate;
     }
 
     static async createRealEstate(data: any): Promise<any> {
-        const duplicate = await RealEstate.exists({
+        const duplicate: object | null = await RealEstate.exists({
             'location.address': data.location?.address,
             'location.coordinates.latitude': data.location?.coordinates?.latitude,
             'location.coordinates.longitude': data.location?.coordinates?.longitude,
@@ -34,13 +57,13 @@ class RealEstateServices {
             throw new Error('A real-estate with the same title and address/coordinates already exists');
         }
 
-        const newRealEstate = await RealEstate.create(data);
+        const newRealEstate: object = await RealEstate.create(data);
         return newRealEstate;
     }
 
     static async updateRealEstate(id: ObjectId, data: any): Promise<any> {
         await this.checkRealEstateExists(id);
-        const updatedRealEstate = await RealEstate.findByIdAndUpdate(
+        const updatedRealEstate: object | null = await RealEstate.findByIdAndUpdate(
             id,
             data,
             { new: true }
@@ -50,7 +73,7 @@ class RealEstateServices {
 
     static async deleteRealEstate(id: ObjectId): Promise<any> {
         await this.checkRealEstateExists(id);
-        const realEstate = await RealEstate.findByIdAndDelete(id);
+        const realEstate: object | null = await RealEstate.findByIdAndDelete(id);
         return { message: "Real-estate deleted successfully", deletedRealEstate: realEstate };
     }
 
@@ -101,7 +124,7 @@ class RealEstateServices {
             query.status = filters.status;
         }
 
-        const results = await RealEstate.find(query)
+        const results: any = await RealEstate.find(query)
             .sort({ createdAt: -1 })
             .limit(filters.limit || 50);
 
@@ -110,7 +133,7 @@ class RealEstateServices {
 
     static async updateAvailability(id: ObjectId, availability: boolean): Promise<any> {
         await this.checkRealEstateExists(id);
-        const updatedRealEstate = await RealEstate.findByIdAndUpdate(
+        const updatedRealEstate: object | null = await RealEstate.findByIdAndUpdate(
             id,
             { availability: availability },
             { new: true }
