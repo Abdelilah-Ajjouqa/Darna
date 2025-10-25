@@ -161,7 +161,7 @@ class RealEstateValidator {
     ];
 
     // Common
-    static idParamValidator = [param("id").isMongoId().withMessage("Invalid id")];
+    static idParamValidator = [param("realEstateId").isMongoId().withMessage("Invalid id")];
 }
 
 export default RealEstateValidator;

@@ -37,8 +37,8 @@ class AuthValidator {
             .isLength({ min: 2, max: 20 })
             .withMessage("Last name should be between 2-20 letters"),
 
-        this.emailValidator,
-        this.passwordValidator,
+        ...AuthValidator.emailValidator,
+        ...AuthValidator.passwordValidator,
 
         body("confirmPassword")
             .exists()
@@ -48,8 +48,8 @@ class AuthValidator {
 
     // login
     static loginValidator = [
-        this.emailValidator,
-        this.passwordValidator,
+        ...AuthValidator.emailValidator,
+        ...AuthValidator.passwordValidator,
     ];
 
 
