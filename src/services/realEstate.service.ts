@@ -72,14 +72,14 @@ class RealEstateServices {
         return { message: "Real-estate deleted successfully", deletedRealEstate: realEstate };
     }
 
-    static async searchRealEstate(filters: any): Promise<any[]> {
+    static async searchRealEstate(filters: any): Promise<any> {
         const query: any = {};
 
         // Price range filter
         if (filters.minPrice || filters.maxPrice) {
             query.price = {};
-            if (filters.minPrice) query.price.$gte = filters.minPrice;
-            if (filters.maxPrice) query.price.$lte = filters.maxPrice;
+            if (filters.minPrice) query.price.$gte = parseFloat(filters.minPrice);
+            if (filters.maxPrice) query.price.$lte = parseFloat(filters.maxPrice);
         }
 
         // Property type filter
@@ -94,24 +94,24 @@ class RealEstateServices {
 
         // Bedrooms filter
         if (filters.bedrooms) {
-            query.bedrooms = { $gte: filters.bedrooms };
+            query.bedrooms = { $gte: parseInt(filters.bedrooms) };
         }
 
         // Bathrooms filter
         if (filters.bathrooms) {
-            query.bathrooms = { $gte: filters.bathrooms };
+            query.bathrooms = { $gte: parseInt(filters.bathrooms) };
         }
 
         // Area/Size filter
         if (filters.minArea || filters.maxArea) {
             query.area = {};
-            if (filters.minArea) query.area.$gte = filters.minArea;
-            if (filters.maxArea) query.area.$lte = filters.maxArea;
+            if (filters.minArea) query.area.$gte = parseFloat(filters.minArea);
+            if (filters.maxArea) query.area.$lte = parseFloat(filters.maxArea);
         }
 
         // Availability filter
         if (filters.isAvailable !== undefined) {
-            query.isAvailable = filters.isAvailable;
+            query.isAvailable = filters.isAvailable === 'true';
         }
 
         // Status filter (for sale, for rent, etc.)
@@ -119,11 +119,28 @@ class RealEstateServices {
             query.status = filters.status;
         }
 
-        const results: any = await RealEstate.find(query)
-            .sort({ createdAt: -1 })
-            .limit(filters.limit || 50);
+        const limit = filters.limit ? parseInt(filters.limit) : 50;
+        const page = filters.page ? parseInt(filters.page) : 1;
+        const skip = (page - 1) * limit;
 
-        return results;
+        const results = await RealEstate.find(query)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const totalCount = await RealEstate.countDocuments(query);
+
+        return {
+            data: results,
+            pagination: {
+                currentPage: page,
+                totalPages: Math.ceil(totalCount / limit),
+                totalCount,
+                limit,
+                hasNextPage: page < Math.ceil(totalCount / limit),
+                hasPrevPage: page > 1
+            }
+        };
     }
 
     static async updateAvailability(id: string, availability: boolean): Promise<any> {

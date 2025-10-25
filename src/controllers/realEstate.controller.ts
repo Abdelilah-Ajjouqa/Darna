@@ -93,6 +93,25 @@ class RealEstateControllers {
             })
         }
     }
+
+    static async searchRealEstate(req: Request, res: Response): Promise<any> {
+        try {
+            const filters = req.query;
+            const search = await RealEstateServices.searchRealEstate(filters)
+
+            res.status(200).json({
+                success: true,
+                message: "Search completed successfully",
+                data: search,
+                count: search.length
+            })
+        } catch (error: any) {
+            res.status(500).json({
+                success: false,
+                error: error.message
+            })
+        }
+    }
 }
 
 export default RealEstateControllers;
