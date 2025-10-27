@@ -1,6 +1,7 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { Property } from "../models/propertyModel";
+import { RealEstateInput } from "../models/real-estate";
 import { HumanMessage } from "@langchain/core/messages";
+import 'dotenv/config';
 
 
 export class PriceEstimationService {
@@ -13,7 +14,7 @@ export class PriceEstimationService {
 
 
     this.llm = new ChatOpenAI({
-      modelName: "openrouter/andromeda-alpha", // You can change this to other models available on OpenRouter
+      model: "openrouter/andromeda-alpha",
       configuration: {
         baseURL: "https://openrouter.ai/api/v1",
         defaultHeaders: {
@@ -22,11 +23,11 @@ export class PriceEstimationService {
         },
       },
       temperature: 0.2,
-      openAIApiKey: process.env.OPENROUTER_API_KEY,
+      apiKey: process.env.OPENROUTER_API_KEY,
     });
   }
 
-  async estimatePrice(property: Property) {
+  async estimatePrice(property: RealEstateInput) {
     const prompt = `
     You are an expert in real estate pricing.
     Estimate a realistic price range in MAD for the following property:
@@ -47,3 +48,4 @@ export class PriceEstimationService {
     }
   }
 }
+
