@@ -47,6 +47,7 @@ export interface Characteristics {
 
 export type TransactionType = 'sale' | 'daily rental' | 'monthly' | 'seasonal';
 
+
 export interface IRealEstate {
     title: string;
     description: string;
