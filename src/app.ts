@@ -2,6 +2,7 @@ import express from "express";
 import 'dotenv/config';
 import priceEstimationRoutes from "./routes/priceEstimationRoutes";
 import { connectionDB } from "./config/db_config";
+import RealEstateRoutes from "./routes/realEstate.routes"
 
 
 
