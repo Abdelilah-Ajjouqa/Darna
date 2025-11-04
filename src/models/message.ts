@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
-    senderId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
-    receiverId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
-    content: { type: String, required: true },
-    read: { type: Boolean, default: false }
-}, { timestamps: true });
+    roomId: { type: String, required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    message: { type: String, default: null },
+    image: { type: String, default: null },
+    read: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now },
+});
 
 const Message = mongoose.model('Message', messageSchema);
 

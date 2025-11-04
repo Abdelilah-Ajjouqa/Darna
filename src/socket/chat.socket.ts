@@ -3,9 +3,11 @@ import MessageService from "../services/message.service";
 
 export default (io: Server, socket: Socket, currentUser: string) => {
 
-    socket.on("send-message", async (data: { receiverId: string; content: string }) => {
+    socket.on("send-message", async (data: { receiverId: string; content: string, image: Buffer }) => {
         try {
-            const message = await MessageService.sendMessage(data.receiverId, currentUser, data.content)
+            const fileName = `chat_${Date.now()}.jpg`;
+            await MessageService.saveImage(data.image, fileName);
+            await MessageService.sendMessage(data.receiverId, currentUser, data.content)
 
         } catch (error) {
             console.error(`Error sending message: ${error}`);
