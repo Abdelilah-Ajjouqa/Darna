@@ -13,7 +13,6 @@ import chatSocket from "./socket/chat.socket";
 connectionDB();
 
 const app = express();
-const port = process.env.PORT;
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
@@ -21,12 +20,9 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-
-
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-
 app.use("/api", priceEstimationRoutes);
 
 io.on('connection', (socket) => {
@@ -45,6 +41,9 @@ io.on('connection', (socket) => {
   }
 })
 
+app.get("/", (req, res)=>{
+  res.send("the Darna-api is running")
+})
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
